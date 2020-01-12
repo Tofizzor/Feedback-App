@@ -2,27 +2,17 @@
 
 <h1 class="pageTitle">Your Feedback</h1>
 <a class="logout-button" href="/logout" role="button">Log out</a>
-
+<a class="backToView-button" href="/view" role="button">All Feedback</a>
 
 <form action="/view" method="post">
   <div class="container">
-    <% contents.forEach(function(feedback){ %>
       <div class="feedback">
         <h5>Name: <%= feedback.name %></h5>
         <h5>Company: <%= feedback.company%> </h5>
-        <% if(feedback.feedback.length > 400){ %>
-          <p class="formatted"> <%= feedback.feedback.substr(0, 400)+ "..." %><a href="/view/<%= feedback._id %>"> Read More</a></p>
-          <% } else { %>
-        <p class="formatted"><%= feedback.feedback %></p>
-        <% } %>
+        <p class="formatted"><%=feedback.feedback%></p>
         <button type="submit" name="delete" value="<%= feedback._id %>">Delete</button>
       </div>
-    <% }); %>
   </div>
-
-
 </form>
-
-
 
 <%- include("partials/footer") -%>

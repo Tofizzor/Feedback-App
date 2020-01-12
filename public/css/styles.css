@@ -56,6 +56,11 @@ h2.active{
   padding: 15px;
 }
 
+.formatted{
+  margin-top: 0;
+  white-space:pre-line;
+}
+
 /* ANIMATIONS */
 
 .fadeInDown {
@@ -67,10 +72,16 @@ h2.active{
   animation-fill-mode: both;
 }
 
-.logout {
+.logout-button {
   position: absolute;
   top: 15px;
   right: 15px;
+}
+
+.backToView-button{
+  position: absolute;
+  top: 15px;
+  right: 80px;
 }
 
 @-webkit-keyframes fadeInDown {

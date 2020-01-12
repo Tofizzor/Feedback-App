@@ -6,7 +6,8 @@ const express = require("express"),
   mongoose = require("mongoose"),
   passport = require("passport"),
   passportLocalMongoose = require("passport-local-mongoose"),
-  session = require("express-session");
+  session = require("express-session"),
+  _ = require("lodash");
 
 
 // Configure connection to MongoDB
@@ -37,7 +38,7 @@ const Feedback = mongoose.model("Feedback", feedbackSchema);
 
 const reviewSchema = {
   page: String,
-  feedbacks: [feedbackSchema]
+  contents: [feedbackSchema]
 };
 
 const Review = mongoose.model("Review", reviewSchema);
@@ -92,21 +93,41 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-function userCreation(){
-User.register({
-      username: process.env.ADMIN_USERNAME
-    }, process.env.ADMIN_PASSWORD, function(err, user) {
+//Create user that can access the feedback
+function userCreation(username, password) {
+User.findOne({
+  username: username
+}, function(err, foundUser) {
+  if (!foundUser) {
+    User.register({
+      username: username
+    }, password, function(err, user) {
       if (err) {
         console.log(err);
       }
     });
-};
-
-User.findOne({username:"admin"}, function(err, foundUser){
-  if(!foundUser){
-    userCreation();
   }
 });
+};
+
+//Create page that contains posted feedback
+function feedbackPageCreation(page) {
+  Review.findOne({
+    page: page
+  }, function(err, foundPage) {
+    if (!foundPage) {
+      const viewPage = new Review({
+        page: page,
+        contents: []
+      });
+      viewPage.save();
+    }
+  });
+}
+
+feedbackPageCreation("View");
+userCreation(process.env.ADMIN_USERNAME, process.env.ADMIN_PASSWORD);
+
 // Application routes.
 
 app.get("/", function(req, res) {
@@ -115,77 +136,99 @@ app.get("/", function(req, res) {
 
 app.route("/login")
   .get(function(req, res) {
-    res.render("login");
-  })
-  .post(function(req, res) {
-      const user = new User({
-        username: req.body.username,
-        password: req.body.password
-      });
-      req.login(user, function(err) {
-        if (err) {
-          console.log(err);
-        } else {
-          passport.authenticate("local")(req, res, function() {
-            res.redirect("/view");
-          });
-        }
-      });
-  });
-
-app.route("/view")
-.get(function(req, res) {
-const page = "View";
-if(req.isAuthenticated()) {
-  Review.findOne({page:page}, function(err, foundPage){
-    if(!foundPage){
-      const viewPage = new Review({
-        page: page,
-        feedbacks: []
-      });
-      viewPage.save();
+    if(req.isAuthenticated()){
       res.redirect("/view");
     } else {
-      res.render("view", {
-        feedbacks: foundPage.feedbacks
-      });
+        res.render("login");
     }
-  });
-} else {
-  res.redirect("/login");
-}
-})
-.post(function(req, res){
-  const feedbackId = req.body.delete;
-  Review.findOne({page: "View"}, function(err, foundPage){
-    foundPage.feedbacks.forEach(function(item, index ,feedback){
-      if(item._id == feedbackId){
-        feedback.splice(index, 1);
-        foundPage.save();
+  })
+  .post(function(req, res) {
+    const user = new User({
+      username: req.body.username,
+      password: req.body.password
+    });
+    req.login(user, function(err) {
+      if (err) {
+        console.log(err);
+      } else {
+        passport.authenticate("local")(req, res, function() {
+          res.redirect("/view");
+        });
       }
     });
   });
-  res.redirect("/view");
-});
+
+app.route("/view")
+  .get(function(req, res) {
+    if (req.isAuthenticated()) {
+      Review.findOne({
+        page: "View"
+      }, function(err, foundPage) {
+        res.render("view", {
+          contents: foundPage.contents
+        });
+      })
+    } else {
+      res.redirect("/login");
+    }
+  })
+  .post(function(req, res) {
+    const feedbackId = req.body.delete;
+    Review.findOne({
+      page: "View"
+    }, function(err, foundPage) {
+      foundPage.contents.forEach(function(item, index, feedback) {
+        if (item._id == feedbackId) {
+          feedback.splice(index, 1);
+          foundPage.save();
+        }
+      });
+    });
+    res.redirect("/view");
+  });
 
 app.route("/feedback")
-.get(function(req, res){
-  res.render("feedback");
-})
-.post(function(req, res){
-  const feedback = new Feedback({
-    name: req.body.name,
-    company: req.body.company,
-    feedback: req.body.feedback
+  .get(function(req, res) {
+    res.render("feedback");
+  })
+  .post(function(req, res) {
+    const feedback = new Feedback({
+      name: req.body.name,
+      company: req.body.company,
+      feedback: req.body.feedback
+    });
+    Review.findOne({
+      page: "View"
+    }, function(err, foundPage) {
+      foundPage.contents.push(feedback);
+      foundPage.save();
+      res.redirect("/");
+    });
   });
-  Review.findOne({page:"View"}, function(err, foundPage){
-    foundPage.feedbacks.push(feedback);
-    foundPage.save();
-    res.redirect("/");
-  });
+
+app.get("/view/:feedbackId", function(req, res) {
+if(req.isAuthenticated()){
+const requestedFeedbackId = req.params.feedbackId;
+Review.findOne({page: "View"}, function(err, pageFound){
+  if(!pageFound){
+    console.log("No page was found named View");
+    res.redirect("/view");
+  } else {
+    pageFound.contents.forEach(function(feedback){
+      if(feedback._id == requestedFeedbackId){
+        res.render("singleFeedback", {
+          feedback: feedback
+        });
+      }
+    })
+  }
+});
+} else {
+  res.redirect("/login");
+}
 });
 
-app.get("/logout", function(req,res){
+app.get("/logout", function(req, res) {
   req.logout();
   res.redirect("/");
 });
