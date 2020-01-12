@@ -1,0 +1,24 @@
+<%- include("partials/header") -%>
+
+<h1 class="pageTitle">Your Feedback</h1>
+<a class="logout" href="/logout" role="button">Log out</a>
+
+
+<form action="/view" method="post">
+  <div class="container">
+    <% feedbacks.forEach(function(feedback){ %>
+      <div class="feedback">
+        <h5>Name: <%= feedback.name %></h5>
+        <h5>Company: <%= feedback.company %> </h5>
+        <p><%= feedback.feedback %></p>
+        <button type="submit" name="delete" value="<%= feedback._id %>">Delete</button>
+      </div>
+    <% }); %>
+  </div>
+
+
+</form>
+
+
+
+<%- include("partials/footer") -%>
