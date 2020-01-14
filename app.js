@@ -36,9 +36,18 @@ const feedbackSchema = {
 
 const Feedback = mongoose.model("Feedback", feedbackSchema);
 
+const surveySchema = {
+  name: String,
+  company: String,
+  survey: []
+};
+
+const Survey = mongoose.model("Survey", surveySchema);
+
 const reviewSchema = {
   page: String,
-  contents: [feedbackSchema]
+  contents: [feedbackSchema],
+  ratings: [surveySchema]
 };
 
 const Review = mongoose.model("Review", reviewSchema);
@@ -205,6 +214,10 @@ app.route("/feedback")
       res.redirect("/");
     });
   });
+
+app.post("/survey", function(req, res){
+console.log(req.body);
+});
 
 app.get("/view/:feedbackId", function(req, res) {
 if(req.isAuthenticated()){

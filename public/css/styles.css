@@ -84,11 +84,29 @@ h2.active{
   right: 80px;
 }
 
+#techExtra{
+  display: none;
+}
+
+#socialExtra{
+  display: none;
+}
+
+#message{
+  display: none;
+}
+
+#survey{
+  display: none;
+}
+
+
+
 @-webkit-keyframes fadeInDown {
   0% {
     opacity: 0;
-    -webkit-transform: translate3d(0, -100%, 0);
-    transform: translate3d(0, -100%, 0);
+    -webkit-transform: translate3d(0, 100%, 0);
+    transform: translate3d(0, 100%, 0);
   }
   100% {
     opacity: 1;
@@ -100,8 +118,8 @@ h2.active{
 @keyframes fadeInDown {
   0% {
     opacity: 0;
-    -webkit-transform: translate3d(0, -100%, 0);
-    transform: translate3d(0, -100%, 0);
+    -webkit-transform: translate3d(0,100%,0);
+    transform: translate3d(0,100%,0);
   }
   100% {
     opacity: 1;

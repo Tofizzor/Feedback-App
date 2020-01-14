@@ -2,19 +2,107 @@
 
 <div class="post">
   <h1>Feedback form</h1>
-  <form action="/feedback" method="post">
-    <div class="form-group">
+<a href="/" class="logout-button" role="button">Go Back</a>
+  <p>
+    <select id="feedback">
+      <option value="">-- Select Feedback Type --</option>
+      <option value="message">Message</option>
+      <option value="survey">Survey</option>
+    </select>
+  </p>
+
+  <div id="message" class="fadeInDown">
+    <form action="/feedback" method="post">
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input class="form-control" type="text" name="name" pattern="[A-Za-z- .]{1,32}" autocomplete="off" placeholder="Leave Empty For Annonymous Name">
+        <label for="comapny">Company</label>
+        <input class="form-control" type="text" name="company" pattern="[A-Za-z0-9- .]{1,32}" autocomplete="off" placeholder="Leave Empty For Annonymous Company">
+        <label for="feedback">Feedback</label>
+        <textarea class="form-control" name="feedback" rows="8" required="required" cols="80"></textarea>
+      </div>
+      <button class="btn btn-primary" type="submit" name="button">Send Feedback</button>
+    </form>
+  </div>
+
+  <div id="survey">
+    <form action="/survey" method="post">
       <label for="name">Name</label>
-      <input class="form-control" type="text" name="name" autocomplete="off" placeholder="Leave Empty For Annonymous Feedback">
+      <input class="form-control" type="text" name="name" pattern="[A-Za-z- .]{1,32}" autocomplete="off" placeholder="Leave Empty For Annonymous Name">
+      <br>
       <label for="comapny">Company</label>
-      <input class="form-control" type="text" name="company" autocomplete="off" placeholder="Leave Empty For Annonymous Feedback">
-      <label for="feedback">Feedback</label>
-      <textarea class="form-control" name="feedback" rows="8" cols="80"></textarea>
-    </div>
-    <button class="btn btn-primary" type="submit" name="button">Send Feedback</button>
-    <a href="/" role="button">Go Back</a>
-  </form>
+      <input class="form-control" type="text" name="company" pattern="[A-Za-z0-9- .]{1,32}" autocomplete="off" placeholder="Leave Empty For Annonymous Company">
+      <br>
+      <label for="socialSkills">How would you rate my social skills?</label>
+      <br>
+      <select name="socialSkills" required="required">
+        <option value="">Please choose an option</option>
+        <option value="vGood">Very Good</option>
+        <option value="good">Good</option>
+        <option value="norm">Normal</option>
+        <option value="poor">Poor</option>
+        <option value="vPoor">Very Poor</option>
+      </select>
+      <br>
+      <button id="socialBtn" type="button" name="button">Add a Note</button>
+      <br>
+      <textarea id="socialExtra" class="form-control" name="socialExtra" rows="2" cols="30"></textarea>
+      <br>
+      <label for="techSkills">How would you rate my technical?</label>
+      <br>
+      <select name="techSkills" required="required">
+        <option value="">Please choose an option</option>
+        <option value="vGood">Very Good</option>
+        <option value="good">Good</option>
+        <option value="norm">Normal</option>
+        <option value="poor">Poor</option>
+        <option value="vPoor">Very Poor</option>
+      </select>
+      <br>
+      <button id="techBtn" type="button" name="button">Add a Note</button>
+      <br>
+      <textarea id="techExtra" class="form-control" name="techExtra" rows="2" cols="30"></textarea>
+      <br />
+      <label for="extra">Feel free to add any extra feedback. (It helps!)</label>
+      <textarea class="form-control" name="extra" rows="4" cols="40"></textarea>
+      <br />
+      <button class="btn btn-primary" type="submit" name="button">Send Feedback</button>
+    </form>
+  </div>
 
 </div>
+
+<script>
+  document.getElementById("feedback").addEventListener("change", function() {
+    document.getElementById("message").style.display = "none";
+    document.getElementById("survey").style.display = "none";
+    const style = this.value;
+    switch (style) {
+      case "message":
+        document.getElementById("message").style.display = "block";
+        break;
+      case "survey":
+      document.getElementById("survey").style.display = "block";
+      break;
+    }
+  });
+
+  document.getElementById("socialBtn").addEventListener("click", function() {
+
+  if(document.getElementById("socialExtra").style.display == "block"){
+    document.getElementById("socialExtra").style.display = "none";
+  } else {
+    document.getElementById("socialExtra").style.display = "block";
+  }
+  });
+
+  document.getElementById("techBtn").addEventListener("click", function() {
+    if(document.getElementById("techExtra").style.display == "block"){
+    document.getElementById("techExtra").style.display = "none";
+  } else {
+    document.getElementById("techExtra").style.display = "block";
+  }
+  });
+</script>
 
 <%- include("partials/footer") -%>
