@@ -28,6 +28,7 @@ mongoose.set('useUnifiedTopology', true);
 
 // Creating schemas and models
 
+// Message Model
 const feedbackSchema = {
   name: String,
   company: String,
@@ -36,21 +37,33 @@ const feedbackSchema = {
 
 const Feedback = mongoose.model("Feedback", feedbackSchema);
 
+// Survey Models
+const ratingSchema = {
+  question: String,
+  rating: String,
+  comment: String
+}
+
+const Rating = mongoose.model("Rating", ratingSchema);
+
 const surveySchema = {
   name: String,
   company: String,
-  survey: []
+  surveys: [ratingSchema],
+  extra: String
 };
 
 const Survey = mongoose.model("Survey", surveySchema);
 
-const reviewSchema = {
+
+//Page Model
+const pageSchema = {
   page: String,
   contents: [feedbackSchema],
   ratings: [surveySchema]
 };
 
-const Review = mongoose.model("Review", reviewSchema);
+const Page = mongoose.model("Page", pageSchema);
 
 const userSchema = new mongoose.Schema({
   username: String,
@@ -104,30 +117,31 @@ app.use(passport.session());
 
 //Create user that can access the feedback
 function userCreation(username, password) {
-User.findOne({
-  username: username
-}, function(err, foundUser) {
-  if (!foundUser) {
-    User.register({
-      username: username
-    }, password, function(err, user) {
-      if (err) {
-        console.log(err);
-      }
-    });
-  }
-});
+  User.findOne({
+    username: username
+  }, function(err, foundUser) {
+    if (!foundUser) {
+      User.register({
+        username: username
+      }, password, function(err, user) {
+        if (err) {
+          console.log(err);
+        }
+      });
+    }
+  });
 };
 
 //Create page that contains posted feedback
 function feedbackPageCreation(page) {
-  Review.findOne({
+  Page.findOne({
     page: page
   }, function(err, foundPage) {
     if (!foundPage) {
-      const viewPage = new Review({
+      const viewPage = new Page({
         page: page,
-        contents: []
+        contents: [],
+        ratings: []
       });
       viewPage.save();
     }
@@ -145,10 +159,10 @@ app.get("/", function(req, res) {
 
 app.route("/login")
   .get(function(req, res) {
-    if(req.isAuthenticated()){
+    if (req.isAuthenticated()) {
       res.redirect("/view");
     } else {
-        res.render("login");
+      res.render("login");
     }
   })
   .post(function(req, res) {
@@ -167,34 +181,47 @@ app.route("/login")
     });
   });
 
-app.route("/view")
-  .get(function(req, res) {
-    if (req.isAuthenticated()) {
-      Review.findOne({
-        page: "View"
-      }, function(err, foundPage) {
-        res.render("view", {
-          contents: foundPage.contents
-        });
-      })
-    } else {
-      res.redirect("/login");
-    }
-  })
-  .post(function(req, res) {
-    const feedbackId = req.body.delete;
-    Review.findOne({
+app.get("/view", function(req, res) {
+  if (req.isAuthenticated()) {
+    Page.findOne({
       page: "View"
     }, function(err, foundPage) {
-      foundPage.contents.forEach(function(item, index, feedback) {
+      res.render("view", {
+        contents: foundPage.contents,
+        ratings: foundPage.ratings
+      });
+    })
+  } else {
+    res.redirect("/login");
+  }
+});
+
+app.post("/delete", function(req, res) {
+  const feedbackId = req.body.delete;
+  const surveyId = req.body.surveyDelete;
+  Page.findOne({
+    page: "View"
+  }, function(err, foundPage) {
+    if(feedbackId != null){
+    foundPage.contents.forEach(function(item, index, feedback) {
         if (item._id == feedbackId) {
           feedback.splice(index, 1);
           foundPage.save();
         }
-      });
     });
-    res.redirect("/view");
+  } else if (surveyId != null){
+    foundPage.ratings.forEach(function(item, index, rating){
+      if(item._id== surveyId) {
+        rating.splice(index, 1);
+        foundPage.save();
+      }
+    });
+  } else {
+    console.log("Error handling delete request");
+  }
   });
+  res.redirect("/view");
+});
 
 app.route("/feedback")
   .get(function(req, res) {
@@ -206,7 +233,7 @@ app.route("/feedback")
       company: req.body.company,
       feedback: req.body.feedback
     });
-    Review.findOne({
+    Page.findOne({
       page: "View"
     }, function(err, foundPage) {
       foundPage.contents.push(feedback);
@@ -215,30 +242,76 @@ app.route("/feedback")
     });
   });
 
-app.post("/survey", function(req, res){
-console.log(req.body);
+app.post("/survey", function(req, res) {
+  let ratings = [req.body.socialSkills, req.body.techSkills];
+  ratings.forEach(function(item, index, rating) {
+    switch (item) {
+      case "vGood":
+        rating[index] = "Very Good";
+        break;
+      case "good":
+        rating[index] = _.capitalize(item);
+        break;
+      case "norm":
+        rating[index] = "Normal";
+        break;
+      case "poor":
+        rating[index] = _.capitalize(item);
+        break;
+      case "vPoor":
+        rating[index] = "Very Poor";
+        break;
+    }
+  });
+  const survey = new Survey({
+    name: req.body.name,
+    company: req.body.company,
+    surveys: [],
+    extra: req.body.extra
+  });
+  let rating = new Rating({
+    question: "Social Skills",
+    rating: ratings[0],
+    comment: req.body.socialExtra
+  });
+  survey.surveys.push(rating);
+  rating = {
+    question: "Technical Skills",
+    rating: ratings[1],
+    comment: req.body.techExtra
+  }
+  survey.surveys.push(rating);
+  Page.findOne({
+    page: "View"
+  }, function(err, foundPage) {
+    foundPage.ratings.push(survey);
+    foundPage.save();
+    res.redirect("/");
+  });
 });
 
 app.get("/view/:feedbackId", function(req, res) {
-if(req.isAuthenticated()){
-const requestedFeedbackId = req.params.feedbackId;
-Review.findOne({page: "View"}, function(err, pageFound){
-  if(!pageFound){
-    console.log("No page was found named View");
-    res.redirect("/view");
-  } else {
-    pageFound.contents.forEach(function(feedback){
-      if(feedback._id == requestedFeedbackId){
-        res.render("singleFeedback", {
-          feedback: feedback
-        });
+  if (req.isAuthenticated()) {
+    const requestedFeedbackId = req.params.feedbackId;
+    Page.findOne({
+      page: "View"
+    }, function(err, pageFound) {
+      if (!pageFound) {
+        console.log("No page was found named View");
+        res.redirect("/view");
+      } else {
+        pageFound.contents.forEach(function(feedback) {
+          if (feedback._id == requestedFeedbackId) {
+            res.render("singleFeedback", {
+              feedback: feedback
+            });
+          }
+        })
       }
-    })
+    });
+  } else {
+    res.redirect("/login");
   }
-});
-} else {
-  res.redirect("/login");
-}
 });
 
 app.get("/logout", function(req, res) {

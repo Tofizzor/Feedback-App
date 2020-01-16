@@ -4,8 +4,12 @@
 <a class="logout-button" href="/logout" role="button">Log out</a>
 
 
-<form action="/view" method="post">
+<form action="/delete" method="post">
   <div class="container">
+    <h2>Message Feedback</h2>
+    <% if(contents.length == 0){ %>
+      <h5>- empty -</h5>
+      <% } else { %>
     <% contents.forEach(function(feedback){ %>
       <div class="feedback">
         <h5>Name: <%= feedback.name %></h5>
@@ -17,10 +21,27 @@
         <% } %>
         <button type="submit" name="delete" value="<%= feedback._id %>">Delete</button>
       </div>
-    <% }); %>
+    <% }); }%>
   </div>
-
-
+  <div class="container">
+    <h2>Survey Feedback</h2>
+    <% if(ratings.length == 0){ %>
+      <h5>- empty -</h5>
+      <% } else { %>
+        <% ratings.forEach(function(rating){ %>
+        <div class="feedback">
+          <h5>Name: <%= rating.name %></h5>
+          <h5>Company: <%= rating.company%> </h5>
+          <% rating.surveys.forEach(function(survey){ %>
+            <p><%= survey.question %> <br />
+              <%= survey.rating %> <br />
+              <%= survey.comment %>
+            </p>
+          <% }); %>
+          <button type="submit" name="surveyDelete" value="<%= rating._id %>">Delete</button>
+        </div>
+        <%}); } %>
+  </div>
 </form>
 
 
