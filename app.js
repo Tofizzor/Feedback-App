@@ -148,6 +148,15 @@ function feedbackPageCreation(page) {
   });
 }
 
+//Check for annonymous feedback
+function checkAnonymous(input) {
+  let text = _.trim(input);
+  if (text.length == 0) {
+    text = "Anonymous";
+  }
+  return text;
+}
+
 feedbackPageCreation("View");
 userCreation(process.env.ADMIN_USERNAME, process.env.ADMIN_PASSWORD);
 
@@ -196,29 +205,33 @@ app.get("/view", function(req, res) {
   }
 });
 
-app.post("/delete", function(req, res) {
+app.route("/delete")
+.get(function(req, res){
+  res.redirect("/view");
+})
+.post(function(req, res) {
   const feedbackId = req.body.delete;
   const surveyId = req.body.surveyDelete;
   Page.findOne({
     page: "View"
   }, function(err, foundPage) {
-    if(feedbackId != null){
-    foundPage.contents.forEach(function(item, index, feedback) {
+    if (feedbackId != null) {
+      foundPage.contents.forEach(function(item, index, feedback) {
         if (item._id == feedbackId) {
           feedback.splice(index, 1);
           foundPage.save();
         }
-    });
-  } else if (surveyId != null){
-    foundPage.ratings.forEach(function(item, index, rating){
-      if(item._id== surveyId) {
-        rating.splice(index, 1);
-        foundPage.save();
-      }
-    });
-  } else {
-    console.log("Error handling delete request");
-  }
+      });
+    } else if (surveyId != null) {
+      foundPage.ratings.forEach(function(item, index, rating) {
+        if (item._id == surveyId) {
+          rating.splice(index, 1);
+          foundPage.save();
+        }
+      });
+    } else {
+      console.log("Error handling delete request");
+    }
   });
   res.redirect("/view");
 });
@@ -228,9 +241,11 @@ app.route("/feedback")
     res.render("feedback");
   })
   .post(function(req, res) {
+    let name = checkAnonymous(req.body.name);
+    let company = checkAnonymous(req.body.company);
     const feedback = new Feedback({
-      name: req.body.name,
-      company: req.body.company,
+      name: name,
+      company: company,
       feedback: req.body.feedback
     });
     Page.findOne({
@@ -238,12 +253,20 @@ app.route("/feedback")
     }, function(err, foundPage) {
       foundPage.contents.push(feedback);
       foundPage.save();
-      res.redirect("/");
+      res.render("thankyou");
     });
   });
-
-app.post("/survey", function(req, res) {
-  let ratings = [req.body.socialSkills, req.body.techSkills];
+app.route("/survey")
+.get(function(req, res){
+  res.redirect("/feedback");
+})
+.post(function(req, res) {
+  let ratingCount = 0;
+  let ratings = [req.body.socialSkills, req.body.techSkills, req.body.techTask];
+  let ratingExtra = [req.body.socialExtra, req.body.techExtra, req.body.techTaskExtra];
+  let name = checkAnonymous(req.body.name);
+  let company = checkAnonymous(req.body.company);
+  let extraFeedback = _.trim(req.body.extra);
   ratings.forEach(function(item, index, rating) {
     switch (item) {
       case "vGood":
@@ -263,32 +286,48 @@ app.post("/survey", function(req, res) {
         break;
     }
   });
+  for(i = 0; i < ratingExtra.length; i++){
+    ratingExtra[i] = _.trim(ratingExtra[i]);
+  }
   const survey = new Survey({
-    name: req.body.name,
-    company: req.body.company,
+    name: name,
+    company: company,
     surveys: [],
-    extra: req.body.extra
+    extra: extraFeedback
   });
   let rating = new Rating({
     question: "Social Skills",
-    rating: ratings[0],
-    comment: req.body.socialExtra
+    rating: ratings[ratingCount],
+    comment: ratingExtra[ratingCount]
   });
   survey.surveys.push(rating);
+  ratingCount++;
   rating = {
     question: "Technical Skills",
-    rating: ratings[1],
-    comment: req.body.techExtra
+    rating: ratings[ratingCount],
+    comment: ratingExtra[ratingCount]
+  };
+  survey.surveys.push(rating);
+  ratingCount++;
+  rating = {
+    question: "Technical Task",
+    rating: ratings[ratingCount],
+    comment: ratingExtra[ratingCount]
   }
   survey.surveys.push(rating);
+  ratingCount++;
   Page.findOne({
     page: "View"
   }, function(err, foundPage) {
     foundPage.ratings.push(survey);
     foundPage.save();
-    res.redirect("/");
+    res.render("thankyou");
   });
 });
+
+// app.get("/thankyou", function(req, res){
+//   res.render("thankyou");
+// });
 
 app.get("/view/:feedbackId", function(req, res) {
   if (req.isAuthenticated()) {

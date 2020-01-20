@@ -12,8 +12,8 @@
       <% } else { %>
     <% contents.forEach(function(feedback){ %>
       <div class="feedback">
-        <h5>Name: <%= feedback.name %></h5>
-        <h5>Company: <%= feedback.company%> </h5>
+        <h4>Name: <%= feedback.name %></h4>
+        <h4>Company: <%= feedback.company%> </h4>
         <% if(feedback.feedback.length > 400){ %>
           <p class="formatted"> <%= feedback.feedback.substr(0, 400)+ "..." %><a href="/view/<%= feedback._id %>"> Read More</a></p>
           <% } else { %>
@@ -29,15 +29,22 @@
       <h5>- empty -</h5>
       <% } else { %>
         <% ratings.forEach(function(rating){ %>
-        <div class="feedback">
-          <h5>Name: <%= rating.name %></h5>
-          <h5>Company: <%= rating.company%> </h5>
+        <div class="survey">
+          <h4>Name: <%= rating.name %></h4>
+          <h4>Company: <%= rating.company%> </h4>
           <% rating.surveys.forEach(function(survey){ %>
             <p><%= survey.question %> <br />
+              <% if(survey.rating.length == 0){ %>
+                - No Rating - <br />
+                <% } else { %>
               <%= survey.rating %> <br />
+              <% } %>
               <%= survey.comment %>
             </p>
           <% }); %>
+          <% if(rating.extra.length != 0){ %>
+            <p>Extra Feedback: <%= rating.extra%> </p>
+            <% } %>
           <button type="submit" name="surveyDelete" value="<%= rating._id %>">Delete</button>
         </div>
         <%}); } %>

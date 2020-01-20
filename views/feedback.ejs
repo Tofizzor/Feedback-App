@@ -1,17 +1,21 @@
 <%- include("partials/header") -%>
 
-<div class="post">
-  <h1>Feedback form</h1>
+<div class="header">
+  <h1>Your Feedback Matters</h1>
   <a href="/" class="logout-button" role="button">Go Back</a>
+</div>
+
 
   <!-- Select type of feedback -->
-  <p>
+<div class="centerOption">
+  <div class="selectOption">
     <select id="feedback">
       <option value="">-- Select Feedback Type --</option>
       <option value="message">Single Message</option>
       <option value="survey">Survey</option>
     </select>
-  </p>
+  </div>
+</div>
 
 
   <!-- Single Message feedback -->
@@ -30,7 +34,7 @@
   <div id="survey">
     <form action="/survey" method="post">
       <%- include("partials/userDetails") -%>
-      <label for="socialSkills">How would you rate my social skills?</label>
+      <label for="socialSkills">How would you rate my social skills?*</label>
       <br>
       <select name="socialSkills" required="required">
        <%- include("partials/option") -%>
@@ -38,9 +42,9 @@
       <br>
       <button id="socialBtn" type="button" name="button">Add a Note</button>
       <br>
-      <textarea id="socialExtra" class="form-control" name="socialExtra" rows="2" cols="30"></textarea>
+      <textarea id="socialExtra" name="socialExtra" class="form-control" rows="2" cols="30"></textarea>
       <br>
-      <label for="techSkills">How would you rate my technical skills?</label>
+      <label for="techSkills">How would you rate my technical skills?*</label>
       <br>
       <select name="techSkills" required="required">
         <%- include("partials/option") -%>
@@ -48,7 +52,17 @@
       <br>
       <button id="techBtn" type="button" name="button">Add a Note</button>
       <br>
-      <textarea id="techExtra" class="form-control" name="techExtra" rows="2" cols="30"></textarea>
+      <textarea id="techExtra" name="techExtra" class="form-control" rows="2" cols="30"></textarea>
+      <br>
+      <label for="techTask">How did I handle technical task?(If there was one)</label>
+      <br>
+      <select name="techTask">
+        <%- include("partials/option") -%>
+      </select>
+      <br>
+      <button id="techTaskBtn" type="button" name="button">Add a Note</button>
+      <br>
+      <textarea id="techTaskExtra" name="techTaskExtra" class="form-control" rows="2" cols="30"></textarea>
       <br>
 
       <label for="extra">Feel free to add any extra feedback. (It helps!)</label>
@@ -58,7 +72,6 @@
     </form>
   </div>
 
-</div>
 
 <script>
   document.getElementById("feedback").addEventListener("change", function() {
@@ -89,6 +102,14 @@
       document.getElementById("techExtra").style.display = "none";
     } else {
       document.getElementById("techExtra").style.display = "block";
+    }
+  });
+
+  document.getElementById("techTaskBtn").addEventListener("click", function() {
+    if (document.getElementById("techTaskExtra").style.display == "block") {
+      document.getElementById("techTaskExtra").style.display = "none";
+    } else {
+      document.getElementById("techTaskExtra").style.display = "block";
     }
   });
 </script>

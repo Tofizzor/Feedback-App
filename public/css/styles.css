@@ -1,10 +1,12 @@
 body {
-  background-color: #E8ECEF;
+  background-color: #f9f7f7;
   height: 100vh;
+  color: #112d4e;
 }
 
 h1{
   margin-bottom: 20px;
+  text-align: center;
 }
 
 h2.inactive{
@@ -14,6 +16,12 @@ h2.inactive{
 h2.active{
   color: #0d0d0d;
   border-bottom: 2px solid #5fbae9;
+}
+
+.header{
+  background-color: #dbe2ef;
+  margin-bottom: 20px;
+  padding: 2px 0 2px;
 }
 
 .formContent {
@@ -41,8 +49,9 @@ h2.active{
 }
 
 .centered {
-    padding-top: 200px;
+    padding-top: 150px;
     text-align: center;
+    margin-bottom: 100px;
 }
 
 .pageTitle {
@@ -84,11 +93,32 @@ h2.active{
   right: 80px;
 }
 
+.selectOption{
+background-color: #3f72af;
+margin-left: auto;
+margin-right: auto;
+height: 45px;
+width: 250px;
+text-align: center;
+padding: 10px;
+border-radius: 10px;
+}
+
+.foot{
+  background-color: #dbe2ef;
+  padding: 20px;
+  text-align: center;
+}
+
+#socialExtra{
+  display: none;
+}
+
 #techExtra{
   display: none;
 }
 
-#socialExtra{
+#techTaskExtra{
   display: none;
 }
 
