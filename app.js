@@ -325,10 +325,6 @@ app.route("/survey")
   });
 });
 
-// app.get("/thankyou", function(req, res){
-//   res.render("thankyou");
-// });
-
 app.get("/view/:feedbackId", function(req, res) {
   if (req.isAuthenticated()) {
     const requestedFeedbackId = req.params.feedbackId;

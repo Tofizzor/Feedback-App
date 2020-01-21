@@ -4,6 +4,19 @@ body {
   color: #112d4e;
 }
 
+html,
+body {
+ height: 100%;
+ position: relative;
+}
+
+footer{
+  margin-top: 25px;
+  width: 100%;
+  text-align: center;
+  height: 60px;
+}
+
 h1{
   margin-bottom: 20px;
   text-align: center;
@@ -19,20 +32,43 @@ h2.active{
 }
 
 .header{
+  overflow: hidden;
   background-color: #dbe2ef;
   margin-bottom: 20px;
-  padding: 2px 0 2px;
+  padding: 5px 0 2px;
+}
+
+/* THANK YOU PAGE */
+.thank {
+min-height: 72vh;
+}
+
+.padding {
+  padding: 10px 0 10px;
+}
+
+.optionStyle {
+  background-color: #3f72af;
+  width: 36rem;
+  border-radius: 10px;
+  margin-top: 20px;
+  padding: 20px;
+  color: #dbe2ef;
+}
+
+.login{
+  padding-bottom: 10px;
+  color: #dbe2ef;
 }
 
 .formContent {
   -webkit-border-radius: 10px 10px 10px 10px;
   border-radius: 10px 10px 10px 10px;
-  background: #5fbae9;
+  background: #3f72af;
   padding: 30px;
-  width: 90%;
+  width: 320px;
   max-width: 450px;
   position: relative;
-  padding: 0px;
   -webkit-box-shadow: 0 30px 60px 0 rgba(0,0,0,0.3);
   box-shadow: 0 30px 60px 0 rgba(0,0,0,0.3);
   text-align: center;
@@ -55,7 +91,14 @@ h2.active{
 }
 
 .pageTitle {
-  text-align: center;
+  text-align: left;
+  padding-left: 20px;
+}
+
+.nav-button{
+  text-align: right;
+  padding-top: 20px;
+  padding-right: 20px;
 }
 
 .feedback {
@@ -65,12 +108,54 @@ h2.active{
   padding: 15px;
 }
 
-.formatted{
+.formatted {
   margin-top: 0;
   white-space:pre-line;
 }
 
-/* ANIMATIONS */
+/* FEEDBACK PAGE OPTIONS */
+
+.selectOption {
+background-color: #3f72af;
+height: 45px;
+width: 250px;
+text-align: center;
+padding: 10px;
+border-radius: 10px;
+}
+
+.centerOption {
+padding-left: 30px;
+}
+
+.options{
+  min-height: 75vh;
+  overflow: hidden;
+  padding-bottom: 40px;
+  margin-left: 0;
+  display: flex;
+  justify-content:flex-start;
+}
+
+.sendButton{
+  text-align: center;
+}
+
+/* VIEW PAGE */
+
+.containerPadding{
+  padding-bottom: 30px;
+}
+
+/* FOOTER */
+
+.foot{
+  background-color: #dbe2ef;
+  padding: 20px;
+  text-align: center;
+}
+
+/* ANIMATION */
 
 .fadeInDown {
   -webkit-animation-name: fadeInDown;
@@ -80,6 +165,8 @@ h2.active{
   -webkit-animation-fill-mode: both;
   animation-fill-mode: both;
 }
+
+/* NAVIGATION BUTTONS */
 
 .logout-button {
   position: absolute;
@@ -91,23 +178,6 @@ h2.active{
   position: absolute;
   top: 15px;
   right: 80px;
-}
-
-.selectOption{
-background-color: #3f72af;
-margin-left: auto;
-margin-right: auto;
-height: 45px;
-width: 250px;
-text-align: center;
-padding: 10px;
-border-radius: 10px;
-}
-
-.foot{
-  background-color: #dbe2ef;
-  padding: 20px;
-  text-align: center;
 }
 
 #socialExtra{

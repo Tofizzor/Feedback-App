@@ -1,53 +1,64 @@
 <%- include("partials/header") -%>
 
-<h1 class="pageTitle">Your Feedback</h1>
-<a class="logout-button" href="/logout" role="button">Log out</a>
-
+<div class="header">
+  <div class="row">
+    <div class="col-8">
+      <h1 class="pageTitle">Your Feedback</h1>
+    </div>
+    <div class="col-4">
+    <a class="logout-button" href="/logout" role="button">Log out</a>
+    </div>
+  </div>
+</div>
 
 <form action="/delete" method="post">
-  <div class="container">
+  <div class="container containerPadding">
     <h2>Message Feedback</h2>
     <% if(contents.length == 0){ %>
-      <h5>- empty -</h5>
-      <% } else { %>
+    <h5>- empty -</h5>
+    <% } else { %>
     <% contents.forEach(function(feedback){ %>
-      <div class="feedback">
+    <div class="feedback form-group">
+      <div class="form-control-plaintext">
         <h4>Name: <%= feedback.name %></h4>
-        <h4>Company: <%= feedback.company%> </h4>
-        <% if(feedback.feedback.length > 400){ %>
-          <p class="formatted"> <%= feedback.feedback.substr(0, 400)+ "..." %><a href="/view/<%= feedback._id %>"> Read More</a></p>
-          <% } else { %>
-        <p class="formatted"><%= feedback.feedback %></p>
-        <% } %>
-        <button type="submit" name="delete" value="<%= feedback._id %>">Delete</button>
       </div>
+
+      <h4>Company: <%= feedback.company%> </h4>
+      <% if(feedback.feedback.length > 400){ %>
+      <p class="formatted"> <%= feedback.feedback.substr(0, 400)+ "..." %><a href="/view/<%= feedback._id %>"> Read More</a></p>
+      <% } else { %>
+      <p class="formatted"><%= feedback.feedback %></p>
+      <% } %>
+      <button type="submit" name="delete" value="<%= feedback._id %>">Delete</button>
+    </div>
     <% }); }%>
   </div>
-  <div class="container">
+  <hr>
+  <div class="container containerPadding">
     <h2>Survey Feedback</h2>
     <% if(ratings.length == 0){ %>
-      <h5>- empty -</h5>
-      <% } else { %>
-        <% ratings.forEach(function(rating){ %>
-        <div class="survey">
-          <h4>Name: <%= rating.name %></h4>
-          <h4>Company: <%= rating.company%> </h4>
-          <% rating.surveys.forEach(function(survey){ %>
-            <p><%= survey.question %> <br />
-              <% if(survey.rating.length == 0){ %>
-                - No Rating - <br />
-                <% } else { %>
-              <%= survey.rating %> <br />
-              <% } %>
-              <%= survey.comment %>
-            </p>
-          <% }); %>
-          <% if(rating.extra.length != 0){ %>
-            <p>Extra Feedback: <%= rating.extra%> </p>
-            <% } %>
-          <button type="submit" name="surveyDelete" value="<%= rating._id %>">Delete</button>
-        </div>
-        <%}); } %>
+    <h5>- empty -</h5>
+    <% } else { %>
+    <% ratings.forEach(function(rating){ %>
+    <div class="survey">
+      <h4>Name: <%= rating.name %></h4>
+      <h4>Company: <%= rating.company%> </h4>
+      <% rating.surveys.forEach(function(survey){ %>
+      <p><%= survey.question %> <br />
+        <% if(survey.rating.length == 0){ %>
+        - No Rating - <br />
+        <% } else { %>
+        <%= survey.rating %> <br />
+        <% } %>
+        <%= survey.comment %>
+      </p>
+      <% }); %>
+      <% if(rating.extra.length != 0){ %>
+      <p>Extra Feedback: <%= rating.extra%> </p>
+      <% } %>
+      <button type="submit" name="surveyDelete" value="<%= rating._id %>">Delete</button>
+    </div>
+    <%}); } %>
   </div>
 </form>
 
