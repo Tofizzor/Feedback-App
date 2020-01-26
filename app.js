@@ -11,7 +11,7 @@ const express = require("express"),
 
 
 // Configure connection to MongoDB
-mongoose.connect('mongodb+srv://admin-justas:JustasKaralevicius@app-cluster-idbig.mongodb.net/feedbackDB', {
+mongoose.connect('mongodb+srv://admin-justas:'+process.env.DB_PASSWORD+'@app-cluster-idbig.mongodb.net/feedbackDB', {
   useNewUrlParser: true,
   useUnifiedTopology: true
 });
