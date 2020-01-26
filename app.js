@@ -367,7 +367,7 @@ app.get("/logout", function(req, res) {
   res.redirect("/");
 });
 
-let port = precess.env.PORT;
+let port = process.env.PORT;
 if(port == null || port == "") {
   port = 3000;
 }
