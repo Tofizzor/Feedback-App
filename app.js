@@ -11,7 +11,7 @@ const express = require("express"),
 
 
 // Configure connection to MongoDB
-mongoose.connect('mongodb://localhost:27017/feedbackDB', {
+mongoose.connect('mongodb+srv://admin-justas:' + process.env.DB_PASSWORD + '@app-cluster-idbig.mongodb.net/feedbackDB', {
   useNewUrlParser: true,
   useUnifiedTopology: true
 });
@@ -367,6 +367,10 @@ app.get("/logout", function(req, res) {
   res.redirect("/");
 });
 
-app.listen("3000", function(req, res) {
-  console.log("Running on port 3000");
+let port = precess.env.PORT;
+if(port == null || port == "") {
+  port = 3000;
+}
+app.listen(port, function(req, res) {
+  console.log("Server started succesfully");
 });
