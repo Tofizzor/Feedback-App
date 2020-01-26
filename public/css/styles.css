@@ -152,12 +152,10 @@ h2.active {
 }
 
 .options {
-  min-height: 75vh;
+  min-height: 80vh;
   overflow: hidden;
   padding-bottom: 40px;
   margin-left: 0;
-  display: flex;
-  justify-content: flex-start;
 }
 
 .row {
