@@ -6,62 +6,93 @@
       <h1 class="pageTitle">Your Feedback</h1>
     </div>
     <div class="col-4">
-    <a class="logout-button" href="/logout" role="button">Log out</a>
+      <div class="nav-button">
+        <a href="/logout" role="button">Log out</a>
+      </div>
     </div>
   </div>
 </div>
 
-<form action="/delete" method="post">
-  <div class="container containerPadding">
-    <h2>Message Feedback</h2>
+<form action="/delete" class="footDown" method="post">
+    <h2 class="viewTitle">Message Feedback</h2>
     <% if(contents.length == 0){ %>
-    <h5>- empty -</h5>
-    <% } else { %>
-    <% contents.forEach(function(feedback){ %>
-    <div class="feedback form-group">
-      <div class="form-control-plaintext">
-        <h4>Name: <%= feedback.name %></h4>
+    <h5 class="viewTitle">- empty -</h5>
+  <% } else { %>
+  <% contents.forEach(function(feedback){ %>
+  <div class="optionStyle form-group center">
+    <div class="form-control-plaintext brightTxt d-inline-flex row justify-content-between">
+      <div class="col-1 order-12 deleteBtn">
+        <button type="submit" class="btn" name="delete" value="<%= feedback._id %>">✖</button>
       </div>
-
+      <div class="col-11 order-1">
+      <h4>Name: <%= feedback.name %></h4>
+      </div>
+    </div>
+    <div class="form-control-plaintext brightTxt row">
+      <div class="col">
       <h4>Company: <%= feedback.company%> </h4>
-      <% if(feedback.feedback.length > 400){ %>
-      <p class="formatted"> <%= feedback.feedback.substr(0, 400)+ "..." %><a href="/view/<%= feedback._id %>"> Read More</a></p>
+      </div>
+    </div>
+    <% if(feedback.feedback.length > 400){ %>
+    <div class="container">
+      <p class="formatted"> <%= feedback.feedback.substr(0, 400)+ "..." %><a href="/view/<%= feedback._id %>" class="darkTxt"> Read More</a></p>
       <% } else { %>
       <p class="formatted"><%= feedback.feedback %></p>
       <% } %>
-      <button type="submit" name="delete" value="<%= feedback._id %>">Delete</button>
     </div>
-    <% }); }%>
   </div>
-  <hr>
-  <div class="container containerPadding">
-    <h2>Survey Feedback</h2>
+  <% }); }%>
+
+  <hr class="hrMargin">
+
+    <h2 class="viewTitle">Survey Feedback</h2>
     <% if(ratings.length == 0){ %>
-    <h5>- empty -</h5>
+    <h5 class="viewTitle">- empty -</h5>
     <% } else { %>
     <% ratings.forEach(function(rating){ %>
-    <div class="survey">
-      <h4>Name: <%= rating.name %></h4>
-      <h4>Company: <%= rating.company%> </h4>
+    <div class="optionStyle form-group center">
+      <div class="form-control-plaintext brightTxt d-inline-flex row justify-content-between">
+          <div class="col-1 order-12 deleteBtn">
+            <button type="submit" class="btn" name="surveyDelete" value="<%= rating._id %>">✖</button>
+          </div>
+          <div class="col-11 order-1">
+            <h4>Name: <%= rating.name %></h4>
+          </div>
+      </div>
+      <div class="form-control-plaintext brightTxt row">
+        <div class="col">
+          <h4>Company: <%= rating.company%> </h4>
+        </div>
+
+      </div>
       <% rating.surveys.forEach(function(survey){ %>
-      <p><%= survey.question %> <br />
+        <div class="row">
+        <div class="brightTxt col-6">
+        <%= survey.question %>
+        </div>
         <% if(survey.rating.length == 0){ %>
-        - No Rating - <br />
+          <div class="brightTxt col">
+        - No Rating -
+        </div>
         <% } else { %>
-        <%= survey.rating %> <br />
+          <div class="brightTxt col-6">
+        Rating: <%= survey.rating %>
+        </div>
         <% } %>
+        <div class="brightTxt col-12 bottomSpace">
         <%= survey.comment %>
-      </p>
+      </div>
+      </div>
       <% }); %>
       <% if(rating.extra.length != 0){ %>
+        <div class="container">
       <p>Extra Feedback: <%= rating.extra%> </p>
+    </div>
       <% } %>
-      <button type="submit" name="surveyDelete" value="<%= rating._id %>">Delete</button>
+
     </div>
     <%}); } %>
-  </div>
 </form>
-
 
 
 <%- include("partials/footer") -%>

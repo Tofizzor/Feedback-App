@@ -1,17 +1,44 @@
 <%- include("partials/header") -%>
 
-<h1 class="pageTitle">Your Feedback</h1>
-<a class="logout-button" href="/logout" role="button">Log out</a>
-<a class="backToView-button" href="/view" role="button">All Feedback</a>
 
-<form action="/view" method="post">
-  <div class="container">
-      <div class="feedback">
-        <h5>Name: <%= feedback.name %></h5>
-        <h5>Company: <%= feedback.company%> </h5>
-        <p class="formatted"><%=feedback.feedback%></p>
-        <button type="submit" name="delete" value="<%= feedback._id %>">Delete</button>
+<div class="header">
+  <div class="row">
+    <div class="col-md-9 col-sm-12">
+      <h1 class="pageTitle">Your Feedback</h1>
+    </div>
+    <div class="col-md-2 col-sm-12">
+      <div class="nav-button">
+        <a class="" href="/view" role="button">All Feedback</a>
+
       </div>
+    </div>
+    <div class="col-md-1 col-sm-12">
+      <div class="nav-button">
+        <a class="" href="/logout" role="button">Log out</a>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<form action="/delete" method="post">
+  <div class="optionStyle form-group center">
+    <div class="form-control-plaintext brightTxt d-inline-flex row justify-content-between">
+      <div class="col-1 order-12 deleteBtn">
+        <button type="submit" class="btn" name="delete" value="<%= feedback._id %>">✖</button>
+      </div>
+      <div class="col-11 order-1">
+        <h4>Name: <%= feedback.name %></h4>
+      </div>
+    </div>
+    <div class="form-control-plaintext brightTxt row">
+      <div class="col">
+        <h4>Company: <%= feedback.company%> </h4>
+      </div>
+    </div>
+    <div class="container">
+      <p class="formatted"><%=feedback.feedback%></p>
+    </div>
   </div>
 </form>
 

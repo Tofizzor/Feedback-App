@@ -6,45 +6,49 @@ body {
 
 html,
 body {
- height: 100%;
- position: relative;
+  height: 100%;
+  position: relative;
 }
 
-footer{
+footer {
   margin-top: 25px;
   width: 100%;
   text-align: center;
   height: 60px;
 }
 
-h1{
+h1 {
   margin-bottom: 20px;
   text-align: center;
 }
 
-h2.inactive{
+h2.inactive {
   color: #cccccc;
 }
 
-h2.active{
+h2.active {
   color: #0d0d0d;
   border-bottom: 2px solid #5fbae9;
 }
 
-.header{
+.header {
   overflow: hidden;
   background-color: #dbe2ef;
   margin-bottom: 20px;
   padding: 5px 0 2px;
 }
 
-/* THANK YOU PAGE */
-.thank {
-min-height: 72vh;
+
+.footDown {
+  min-height: 72vh;
 }
 
 .padding {
   padding: 10px 0 10px;
+}
+
+.bottomSpace {
+  margin-bottom: 20px;
 }
 
 .optionStyle {
@@ -54,9 +58,29 @@ min-height: 72vh;
   margin-top: 20px;
   padding: 20px;
   color: #dbe2ef;
+  word-break: break-all;
 }
 
-.login{
+.center{
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.viewTitle{
+  text-align: center;
+}
+
+/* TEXT COLOURS */
+
+.brightTxt {
+  color: #dbe2ef;
+}
+
+.darkTxt {
+  color: #112d4e;
+}
+
+.login {
   padding-bottom: 10px;
   color: #dbe2ef;
 }
@@ -69,13 +93,13 @@ min-height: 72vh;
   width: 320px;
   max-width: 450px;
   position: relative;
-  -webkit-box-shadow: 0 30px 60px 0 rgba(0,0,0,0.3);
-  box-shadow: 0 30px 60px 0 rgba(0,0,0,0.3);
+  -webkit-box-shadow: 0 30px 60px 0 rgba(0, 0, 0, 0.3);
+  box-shadow: 0 30px 60px 0 rgba(0, 0, 0, 0.3);
   text-align: center;
 }
 
 .wrapper {
-  display:flex;
+  display: flex;
   align-items: center;
   flex-direction: column;
   justify-content: center;
@@ -85,9 +109,9 @@ min-height: 72vh;
 }
 
 .centered {
-    padding-top: 150px;
-    text-align: center;
-    margin-bottom: 100px;
+  padding-top: 150px;
+  text-align: center;
+  margin-bottom: 100px;
 }
 
 .pageTitle {
@@ -95,7 +119,7 @@ min-height: 72vh;
   padding-left: 20px;
 }
 
-.nav-button{
+.nav-button {
   text-align: right;
   padding-top: 20px;
   padding-right: 20px;
@@ -110,53 +134,58 @@ min-height: 72vh;
 
 .formatted {
   margin-top: 0;
-  white-space:pre-line;
+  white-space: pre-line;
 }
 
 /* FEEDBACK PAGE OPTIONS */
-
 .selectOption {
-background-color: #3f72af;
-height: 45px;
-width: 250px;
-text-align: center;
-padding: 10px;
-border-radius: 10px;
+  background-color: #3f72af;
+  height: 45px;
+  width: 250px;
+  text-align: center;
+  padding: 10px;
+  border-radius: 10px;
 }
 
 .centerOption {
-padding-left: 30px;
+  padding-left: 30px;
 }
 
-.options{
+.options {
   min-height: 75vh;
   overflow: hidden;
   padding-bottom: 40px;
   margin-left: 0;
   display: flex;
-  justify-content:flex-start;
+  justify-content: flex-start;
 }
 
-.sendButton{
+.row {
+  margin: 0;
+}
+
+.deleteBtn {
+  position: relative;
+  margin-top: -20px;
+}
+
+.sendButton {
   text-align: center;
 }
 
-/* VIEW PAGE */
-
-.containerPadding{
-  padding-bottom: 30px;
+.hrMargin {
+  margin-top: 5rem;
+  margin-bottom: 20px;
 }
 
 /* FOOTER */
-
-.foot{
+.foot {
   background-color: #dbe2ef;
   padding: 20px;
   text-align: center;
 }
 
 /* ANIMATION */
-
 .fadeInDown {
   -webkit-animation-name: fadeInDown;
   animation-name: fadeInDown;
@@ -167,40 +196,37 @@ padding-left: 30px;
 }
 
 /* NAVIGATION BUTTONS */
-
 .logout-button {
   position: absolute;
   top: 15px;
   right: 15px;
 }
 
-.backToView-button{
+.backToView-button {
   position: absolute;
   top: 15px;
   right: 80px;
 }
 
-#socialExtra{
+#socialExtra {
   display: none;
 }
 
-#techExtra{
+#techExtra {
   display: none;
 }
 
-#techTaskExtra{
+#techTaskExtra {
   display: none;
 }
 
-#message{
+#message {
   display: none;
 }
 
-#survey{
+#survey {
   display: none;
 }
-
-
 
 @-webkit-keyframes fadeInDown {
   0% {
@@ -208,6 +234,7 @@ padding-left: 30px;
     -webkit-transform: translate3d(0, 100%, 0);
     transform: translate3d(0, 100%, 0);
   }
+
   100% {
     opacity: 1;
     -webkit-transform: none;
@@ -218,9 +245,10 @@ padding-left: 30px;
 @keyframes fadeInDown {
   0% {
     opacity: 0;
-    -webkit-transform: translate3d(0,100%,0);
-    transform: translate3d(0,100%,0);
+    -webkit-transform: translate3d(0, 100%, 0);
+    transform: translate3d(0, 100%, 0);
   }
+
   100% {
     opacity: 1;
     -webkit-transform: none;
@@ -229,6 +257,32 @@ padding-left: 30px;
 }
 
 /* Simple CSS3 Fade-in Animation */
-@-webkit-keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
-@-moz-keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
-@keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+@-webkit-keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@-moz-keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}

@@ -132,7 +132,7 @@ function userCreation(username, password) {
   });
 };
 
-//Create page that contains posted feedback
+//Create page in database that contains posted feedback
 function feedbackPageCreation(page) {
   Page.findOne({
     page: page
@@ -148,7 +148,7 @@ function feedbackPageCreation(page) {
   });
 }
 
-//Check for annonymous feedback
+//Check if user details are blank
 function checkAnonymous(input) {
   let text = _.trim(input);
   if (text.length == 0) {
@@ -157,7 +157,9 @@ function checkAnonymous(input) {
   return text;
 }
 
+//create page in database
 feedbackPageCreation("View");
+//create user
 userCreation(process.env.ADMIN_USERNAME, process.env.ADMIN_PASSWORD);
 
 // Application routes.
@@ -195,6 +197,7 @@ app.get("/view", function(req, res) {
     Page.findOne({
       page: "View"
     }, function(err, foundPage) {
+      // Render the feedback from the database
       res.render("view", {
         contents: foundPage.contents,
         ratings: foundPage.ratings
@@ -215,6 +218,7 @@ app.route("/delete")
   Page.findOne({
     page: "View"
   }, function(err, foundPage) {
+    // If feedbackId exists delete the item from the feedback array
     if (feedbackId != null) {
       foundPage.contents.forEach(function(item, index, feedback) {
         if (item._id == feedbackId) {
@@ -222,6 +226,7 @@ app.route("/delete")
           foundPage.save();
         }
       });
+      // If surveyId exists delete the item from the survey array
     } else if (surveyId != null) {
       foundPage.ratings.forEach(function(item, index, rating) {
         if (item._id == surveyId) {
@@ -262,7 +267,9 @@ app.route("/survey")
 })
 .post(function(req, res) {
   let ratingCount = 0;
+  // Add survey ratings into array
   let ratings = [req.body.socialSkills, req.body.techSkills, req.body.techTask];
+  // Add survey extra feedback into array
   let ratingExtra = [req.body.socialExtra, req.body.techExtra, req.body.techTaskExtra];
   let name = checkAnonymous(req.body.name);
   let company = checkAnonymous(req.body.company);
@@ -286,15 +293,18 @@ app.route("/survey")
         break;
     }
   });
+
   for(i = 0; i < ratingExtra.length; i++){
     ratingExtra[i] = _.trim(ratingExtra[i]);
   }
+
   const survey = new Survey({
     name: name,
     company: company,
     surveys: [],
     extra: extraFeedback
   });
+
   let rating = new Rating({
     question: "Social Skills",
     rating: ratings[ratingCount],
@@ -302,6 +312,7 @@ app.route("/survey")
   });
   survey.surveys.push(rating);
   ratingCount++;
+
   rating = {
     question: "Technical Skills",
     rating: ratings[ratingCount],
@@ -309,6 +320,7 @@ app.route("/survey")
   };
   survey.surveys.push(rating);
   ratingCount++;
+
   rating = {
     question: "Technical Task",
     rating: ratings[ratingCount],
@@ -316,6 +328,7 @@ app.route("/survey")
   }
   survey.surveys.push(rating);
   ratingCount++;
+
   Page.findOne({
     page: "View"
   }, function(err, foundPage) {
