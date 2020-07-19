@@ -17,7 +17,7 @@
     "ejs": "^3.0.1",
     "express": "^4.17.1",
     "express-session": "^1.17.0",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "mongoose": "^5.8.5",
     "mongoose-encryption": "^2.0.2",
     "mongoose-findorcreate": "^3.0.0",
